@@ -36,8 +36,10 @@ export function Button({
     lg: 'px-6 py-3 text-lg',
   };
 
+  const MotionButton = motion.button as any;
+  
   return (
-    <motion.button
+    <MotionButton
       whileHover={{ 
         scale: disabled || loading ? 1 : 1.05,
         boxShadow: disabled || loading ? 'none' : '0 10px 30px -10px rgba(0, 51, 173, 0.5)',
@@ -59,6 +61,6 @@ export function Button({
         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         {children}
       </span>
-    </motion.button>
+    </MotionButton>
   );
 }
