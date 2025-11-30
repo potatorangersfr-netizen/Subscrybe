@@ -18,8 +18,6 @@ const subscriptionRoutes = require('./routes/subscriptions');
 const paymentRoutes = require('./routes/payments');
 const privacyRoutes = require('./routes/privacy');
 const merchantRoutes = require('./routes/merchants');
-const hydraChannelsRoutes = require('./routes/hydra-channels');
-const hydraPaymentsRoutes = require('./routes/hydra-payments');
 
 // Use routes
 app.use('/api/auth', authRoutes);
@@ -28,13 +26,6 @@ app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/privacy', privacyRoutes);
 app.use('/api/merchants', merchantRoutes);
-// Mount more specific routes first
-app.use('/api/hydra/payments', hydraPaymentsRoutes);
-app.use('/api/hydra', hydraChannelsRoutes);
-
-console.log('🌊 Hydra routes registered');
-console.log('   /api/hydra/payments/*');
-console.log('   /api/hydra/*');
 
 // Debug: Log all registered routes
 console.log('📋 Registered subscription routes:');
@@ -71,5 +62,4 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🚀 Subscrybe Backend running on port ${PORT}`);
   console.log(`📍 Health check: http://localhost:${PORT}/health`);
-  console.log(`🌊 Hydra integration: http://localhost:${PORT}/api/hydra/health`);
 });

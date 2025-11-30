@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Calendar, DollarSign, Zap, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { hydraApi } from '@/lib/hydra-api';
 import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
 
@@ -14,50 +13,30 @@ interface RealSubscriptionCardProps {
   onPaymentComplete?: () => void;
 }
 
-const USER_ID = 'demo-user-web';
-
 export function RealSubscriptionCard({ subscription, onPaymentComplete }: RealSubscriptionCardProps) {
   const [paying, setPaying] = useState(false);
 
   const handlePayNow = async () => {
     setPaying(true);
     
+    // Simulate payment processing
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
     try {
-      // Check if user has Hydra channel
-      const channel = await hydraApi.getChannelStatus(USER_ID);
-      
-      if (!channel.hasChannel || channel.status?.toLowerCase() !== 'open') {
-        toast.error('Please open a Hydra channel first! Go to /hydra');
-        setPaying(false);
-        return;
-      }
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#0033AD', '#00D4AA', '#10B981']
+      });
 
-      // Execute payment
-      const result = await hydraApi.executePayment(
-        USER_ID,
-        subscription.merchantId || 'merchant-' + subscription.id,
-        subscription.amount,
-        'subscription-' + subscription.id
+      toast.success(
+        `⚡ Payment processed successfully!\nPaid ${subscription.amount} ADA to ${subscription.name}`,
+        { duration: 4000 }
       );
 
-      if (result.success) {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#0033AD', '#00D4AA', '#10B981']
-        });
-
-        toast.success(
-          `⚡ Payment processed in ${result.processingTimeMs}ms!\nNew balance: ${result.newBalance} ADA`,
-          { duration: 4000 }
-        );
-
-        if (onPaymentComplete) {
-          onPaymentComplete();
-        }
-      } else {
-        toast.error('Payment failed: ' + (result as any).error);
+      if (onPaymentComplete) {
+        onPaymentComplete();
       }
     } catch (error: any) {
       toast.error('Payment error: ' + error.message);
@@ -127,7 +106,7 @@ export function RealSubscriptionCard({ subscription, onPaymentComplete }: RealSu
             ) : (
               <>
                 <Zap className="mr-2 h-4 w-4" />
-                Pay Now via Hydra
+                Pay Now
               </>
             )}
           </Button>
