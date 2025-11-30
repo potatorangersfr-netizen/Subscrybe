@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Zap } from 'lucide-react';
+import Image from 'next/image';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { SubscriptionCard } from '@/components/subscriptions/subscription-card';
 import { RealSubscriptionCard } from '@/components/subscriptions/real-subscription-card';
@@ -14,10 +15,11 @@ import toast from 'react-hot-toast';
 import { staggerContainer } from '@/lib/animations';
 
 export default function SubscriptionsPage() {
-  const { subscriptions, cancelSubscription, loading, setSubscriptions } = useApp();
+  const { subscriptions, setSubscriptions } = useApp();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'paused' | 'cancelled'>('all');
+  const [blockchainFilter, setBlockchainFilter] = useState<'all' | 'cardano' | 'ethereum' | 'polygon'>('all');
   const [useRealPayments, setUseRealPayments] = useState(true);
 
   const filteredSubscriptions = subscriptions.filter((sub) => {
@@ -88,6 +90,46 @@ export default function SubscriptionsPage() {
           <Button onClick={() => setIsAddModalOpen(true)}>
             <Plus className="h-5 w-5 mr-2" />
             Add Subscription
+          </Button>
+        </div>
+
+        {/* Blockchain Filter */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <Button 
+            variant={blockchainFilter === 'all' ? 'primary' : 'secondary'}
+            onClick={() => setBlockchainFilter('all')}
+            size="sm"
+          >
+            All Chains
+          </Button>
+          <Button 
+            variant={blockchainFilter === 'cardano' ? 'primary' : 'secondary'}
+            onClick={() => setBlockchainFilter('cardano')}
+            className="flex items-center gap-2"
+            size="sm"
+          >
+            <Image src="/icons/cardano.svg" width={16} height={16} alt="Cardano" />
+            Cardano ({subscriptions.length})
+          </Button>
+          <Button 
+            variant="secondary"
+            disabled
+            className="flex items-center gap-2 opacity-60"
+            size="sm"
+            onClick={() => toast('Ethereum support coming Q2 2025!')}
+          >
+            <Image src="/icons/ethereum.svg" width={16} height={16} alt="Ethereum" />
+            Ethereum (0)
+          </Button>
+          <Button 
+            variant="secondary"
+            disabled
+            className="flex items-center gap-2 opacity-60"
+            size="sm"
+            onClick={() => toast('Polygon support coming Q3 2025!')}
+          >
+            <Image src="/icons/polygon.svg" width={16} height={16} alt="Polygon" />
+            Polygon (0)
           </Button>
         </div>
 

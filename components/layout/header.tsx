@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, Check, Wallet } from 'lucide-react';
+import { Copy, Check, Wallet, ChevronDown } from 'lucide-react';
+import Image from 'next/image';
 import { useApp } from '@/lib/context';
 import { formatAddress, formatCurrency } from '@/lib/utils';
 import { Button } from '../ui/button';
+import { Dropdown, DropdownTrigger, DropdownContent, DropdownItem } from '../ui/dropdown';
 import toast from 'react-hot-toast';
 
 export function Header() {
@@ -46,17 +48,92 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
+          {/* Blockchain Selector */}
+          <Dropdown>
+            <DropdownTrigger>
+              <Button variant="secondary" className="flex items-center gap-2">
+                <Image src="/icons/cardano.svg" width={20} height={20} alt="Cardano" />
+                <span className="hidden md:inline">Cardano</span>
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownContent>
+              <DropdownItem active>
+                <Image src="/icons/cardano.svg" width={16} height={16} alt="Cardano" />
+                <span>Cardano (Active)</span>
+              </DropdownItem>
+              <DropdownItem 
+                disabled 
+                onClick={() => toast('Multi-chain support launching Q2 2025! Join the waitlist.')}
+              >
+                <Image src="/icons/ethereum.svg" width={16} height={16} alt="Ethereum" />
+                <span>Ethereum (Coming Soon)</span>
+              </DropdownItem>
+              <DropdownItem 
+                disabled
+                onClick={() => toast('Multi-chain support launching Q3 2025! Join the waitlist.')}
+              >
+                <Image src="/icons/polygon.svg" width={16} height={16} alt="Polygon" />
+                <span>Polygon (Coming Soon)</span>
+              </DropdownItem>
+              <DropdownItem 
+                disabled
+                onClick={() => toast('Multi-chain support launching Q3 2025! Join the waitlist.')}
+              >
+                <Image src="/icons/solana.svg" width={16} height={16} alt="Solana" />
+                <span>Solana (Coming Soon)</span>
+              </DropdownItem>
+            </DropdownContent>
+          </Dropdown>
+
+          {/* Wallet Selector */}
+          {user && (
+            <Dropdown>
+              <DropdownTrigger>
+                <Button variant="secondary" className="flex items-center gap-2">
+                  <Wallet className="w-4 h-4" />
+                  <span className="hidden md:inline">Nami</span>
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownContent>
+                <DropdownItem active>
+                  <Wallet className="w-4 h-4" />
+                  <span>Nami (Connected)</span>
+                </DropdownItem>
+                <DropdownItem onClick={() => toast('Eternl wallet support coming soon!')}>
+                  <Wallet className="w-4 h-4" />
+                  <span>Eternl</span>
+                </DropdownItem>
+                <DropdownItem 
+                  disabled
+                  onClick={() => toast('MetaMask support launching with Ethereum integration!')}
+                >
+                  <Wallet className="w-4 h-4" />
+                  <span>MetaMask (Coming Soon)</span>
+                </DropdownItem>
+                <DropdownItem 
+                  disabled
+                  onClick={() => toast('Phantom support launching with Solana integration!')}
+                >
+                  <Wallet className="w-4 h-4" />
+                  <span>Phantom (Coming Soon)</span>
+                </DropdownItem>
+              </DropdownContent>
+            </Dropdown>
+          )}
+
           {user ? (
             <>
-              <div className="hidden md:block">
+              <div className="hidden lg:block">
                 <p className="text-sm text-[#94A3B8] mb-1">Balance</p>
                 <p className="text-lg font-semibold text-[#F8FAFC]">
                   {formatCurrency(user.balance || 0)}
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 bg-[#0F172A] px-4 py-2 rounded-lg border border-[#334155]">
+              <div className="hidden md:flex items-center gap-2 bg-[#0F172A] px-4 py-2 rounded-lg border border-[#334155]">
                 <code className="text-sm font-mono text-[#F8FAFC]">
                   {formatAddress(user.walletAddress || '')}
                 </code>

@@ -574,3 +574,63 @@ This demo successfully showcases:
 [Live Demo](https://subscrybe-demo.vercel.app) • [Documentation](./QUICK-START.md) • [Report Bug](https://github.com/potatorangersfr-netizen/Subscrybe/issues)
 
 </div>
+
+
+---
+
+## 🌐 Multi-Chain Support (Visual UI)
+
+The current version includes **visual UI components** for multi-chain support to demonstrate the platform's vision and roadmap. Backend integration for Ethereum, Polygon, and Solana is planned for 2025.
+
+### Currently Live
+- ✅ **Cardano** - Full integration with Plutus smart contracts
+- ✅ Nami & Eternl wallet support
+- ✅ Payment processing on Cardano L1
+- ✅ Privacy-first subscription management
+
+### Roadmap
+
+**Q2 2025 - Ethereum Integration**
+- 🔜 Solidity smart contracts
+- 🔜 MetaMask wallet support
+- 🔜 ERC-20 token payments
+- 🔜 Cross-chain analytics dashboard
+
+**Q3 2025 - Polygon & Solana**
+- 🔜 Low-fee L2 option (Polygon)
+- 🔜 Phantom wallet support (Solana)
+- 🔜 Multi-chain payment routing
+- 🔜 Unified balance across chains
+
+**Q4 2025 - Advanced Features**
+- 🔜 Cross-chain atomic swaps
+- 🔜 Fiat on-ramp integration
+- 🔜 Mobile apps (iOS & Android)
+- 🔜 Merchant API for integrations
+
+### UI Features (Visual Only)
+
+The following multi-chain UI elements are currently **visual demonstrations**:
+
+1. **Blockchain Selector** (Header)
+   - Dropdown showing Cardano (active) and upcoming chains
+   - Coming soon badges for Ethereum, Polygon, Solana
+
+2. **Wallet Selector** (Header)
+   - Shows Nami as connected wallet
+   - Lists upcoming wallet support (MetaMask, Phantom)
+
+3. **Connected Blockchains Dashboard**
+   - Visual cards for each blockchain
+   - Shows Cardano as active with subscription count
+   - Displays roadmap for other chains
+
+4. **Blockchain Filter** (Subscriptions Page)
+   - Filter tabs for different blockchains
+   - Currently only Cardano has active subscriptions
+
+### Backend Status
+
+**Important**: All blockchain switching and wallet selection is currently **UI-only**. The backend remains Cardano-focused. Multi-chain backend integration will be implemented according to the roadmap above.
+
+---
