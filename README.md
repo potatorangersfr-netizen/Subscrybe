@@ -1,6 +1,6 @@
 # 🚀 Subscrybe - Cardano Subscription Management Platform
 
-> **Web2 Polish, Web3 Values** - A privacy-first subscription management platform built on Cardano with Hydra Layer 2 integration.
+> **Web2 Polish, Web3 Values** - A privacy-first subscription management platform built on Cardano.
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
@@ -15,7 +15,6 @@
 - [Quick Start](#-quick-start)
 - [Project Structure](#-project-structure)
 - [Features Deep Dive](#-features-deep-dive)
-- [Hydra Integration](#-hydra-integration)
 - [Demo Guide](#-demo-guide)
 - [Deployment](#-deployment)
 - [Contributing](#-contributing)
@@ -35,14 +34,14 @@ Subscrybe is a comprehensive subscription management platform that brings Web2 c
 Crypto users manage 8+ subscriptions across different platforms with no unified view, leading to budget chaos and missed cancellations.
 
 ### Our Solution
-A single dashboard to track, optimize, and cancel all crypto subscriptions with privacy protection and Hydra-powered instant transactions.
+A single dashboard to track, optimize, and cancel all crypto subscriptions with privacy protection and secure Cardano transactions.
 
 ---
 
 ## ✨ Key Features
 
 ### 🎨 User Interface
-- **8 Complete Pages**: Landing, Dashboard, Subscriptions, Calendar, Payment Service, Privacy, Merchant, Memes
+- **7 Complete Pages**: Landing, Dashboard, Subscriptions, Calendar, Payment Service, Privacy, Merchant, Memes
 - **25+ Components**: Fully reusable, animated, and responsive
 - **Dark Theme**: Cardano-branded color scheme
 - **Smooth Animations**: Framer Motion throughout
@@ -97,7 +96,6 @@ A single dashboard to track, optimize, and cancel all crypto subscriptions with 
 ### Blockchain
 - **Network**: Cardano (Preprod Testnet)
 - **Smart Contracts**: Plutus (Haskell)
-- **Layer 2**: Hydra Head Protocol
 - **Wallet**: Mock implementation (demo)
 
 ---
@@ -135,7 +133,7 @@ http://localhost:3000
 
 ### Backend Setup (Optional)
 
-The backend provides Hydra integration and real-time updates:
+The backend provides API services and real-time updates:
 
 ```bash
 cd backend
@@ -144,18 +142,6 @@ npm start
 ```
 
 Backend runs on `http://localhost:3001`
-
-### Mock Hydra Server (Optional)
-
-For testing Hydra functionality:
-
-```bash
-cd hydra-node/mock-hydra-server
-npm install
-npm start
-```
-
-Mock server runs on `http://localhost:5001`
 
 ---
 
@@ -170,12 +156,10 @@ subscrybe-demo/
 │   ├── dashboard/               # Dashboard page
 │   ├── subscriptions/           # Subscription management
 │   ├── calendar/                # Payment calendar
-│   ├── hydra/                   # Hydra demo
 │   ├── privacy/                 # Privacy dashboard
 │   ├── merchant/                # Merchant analytics
 │   ├── contracts/               # Smart contracts info
-│   ├── micro-subscriptions/     # Micro-subscription demo
-│   ├── pay-per-use/             # Pay-per-use demo
+│   ├── payment-service/         # Payment service demo
 │   └── memes/                   # Memes gallery
 │
 ├── components/
@@ -190,7 +174,6 @@ subscrybe-demo/
 │   │   └── sidebar.tsx
 │   ├── dashboard/               # Dashboard components
 │   ├── subscriptions/           # Subscription components
-│   ├── hydra/                   # Hydra demo components
 │   └── memes/                   # Meme/achievement popups
 │
 ├── lib/                         # Utilities & helpers
@@ -199,7 +182,6 @@ subscrybe-demo/
 │   ├── animations.ts           # Framer Motion variants
 │   ├── context.tsx             # React Context
 │   ├── blockchain.ts           # Blockchain utilities
-│   ├── hydra-api.ts            # Hydra API client
 │   └── api-client.ts           # Backend API client
 │
 ├── backend/                     # Express backend
@@ -214,10 +196,6 @@ subscrybe-demo/
 │   ├── subscription-vault.hs   # Main contract
 │   ├── contract-simulator.js   # Testing simulator
 │   └── README.md
-│
-├── hydra-node/                  # Hydra integration
-│   ├── mock-hydra-server/      # Mock Hydra server
-│   └── docker-compose.yml      # Hydra node setup
 │
 ├── public/                      # Static assets
 │   └── memes/                  # Meme images (9 total)
@@ -333,14 +311,14 @@ Visit `/payment-service` to see:
 > "Privacy-first design. We only know your wallet address. Export or delete anytime."
 
 **Closing (30s)**
-> "Web2 polish, Web3 values. Built on Cardano. Powered by Hydra."
+> "Web2 polish, Web3 values. Built on Cardano with smart contracts and secure payments."
 
 ### Key Talking Points
 
 1. **Problem**: Subscription chaos in crypto
 2. **Solution**: Unified dashboard with payment service
 3. **Benefits**: Low fees, security, privacy
-4. **Tech**: Cardano L1 + Plutus + Payment Service
+4. **Tech**: Cardano + Plutus + Payment Service
 5. **UX**: Beautiful, intuitive, responsive
 
 ### Screenshots to Take
@@ -455,7 +433,6 @@ Update `NEXT_PUBLIC_API_URL` in frontend.
 - [ ] Modals open/close properly
 - [ ] Search/filter works
 - [ ] Responsive on mobile
-- [ ] Hydra demo completes
 - [ ] Toast notifications appear
 - [ ] Data export works
 - [ ] Meme popups trigger
@@ -463,14 +440,11 @@ Update `NEXT_PUBLIC_API_URL` in frontend.
 ### Test Scripts
 
 ```powershell
-# Test Hydra integration
-.\test-hydra-integration.ps1
-
-# Test micro-subscriptions
-.\test-micro-and-payperuse.ps1
-
 # Check backend connection
 .\test-demo.ps1
+
+# Check application status
+.\check-status.ps1
 ```
 
 ---
@@ -525,7 +499,6 @@ This is a demo, so the following are intentionally mocked:
 - ❌ Real wallet integration (Nami, Eternl, etc.)
 - ❌ Real smart contract deployment
 - ❌ Blockfrost API calls
-- ❌ Production Hydra Head
 - ❌ User authentication
 - ❌ Database persistence
 - ❌ Payment processing
@@ -562,7 +535,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## 🙏 Acknowledgments
 
 - **Cardano Foundation** - For the amazing blockchain
-- **IOG** - For Hydra and Plutus
+- **IOG** - For Plutus and smart contract tools
 - **Community** - For memes and support
 - **Judges** - For reviewing this project
 
@@ -583,7 +556,7 @@ This demo successfully showcases:
 - ✅ Payment service provider model (transparent fees)
 - ✅ Privacy-first design principles
 - ✅ Beautiful UX that rivals Web2 apps
-- ✅ Technical feasibility on Cardano L1
+- ✅ Technical feasibility on Cardano
 
 **Perfect for:**
 - Hackathon presentations
