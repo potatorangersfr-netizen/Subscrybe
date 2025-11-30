@@ -145,10 +145,10 @@ export default function LandingPage() {
                 <Zap className="h-8 w-8 text-[#00D4AA]" />
               </motion.div>
               <h3 className="text-2xl font-semibold text-[#F8FAFC] mb-4">
-                Hydra-Ready
+                Payment Service
               </h3>
               <p className="text-[#94A3B8]">
-                Lightning-fast payments with Cardano's Layer 2 solution. 100x faster, 95% cheaper
+                Seamless payment processing on Cardano L1. Low fees, secure transactions, automated recurring payments
               </p>
             </div>
           </motion.div>
@@ -249,15 +249,15 @@ export default function LandingPage() {
             <a href="https://cardanoscan.io" target="_blank" rel="noopener noreferrer" className="text-[#94A3B8] hover:text-[#F8FAFC] transition-colors">
               Explorer
             </a>
-            <a href="https://hydra.family" target="_blank" rel="noopener noreferrer" className="text-[#94A3B8] hover:text-[#F8FAFC] transition-colors">
-              Hydra
+            <a href="https://cardano.org" target="_blank" rel="noopener noreferrer" className="text-[#94A3B8] hover:text-[#F8FAFC] transition-colors">
+              Cardano
             </a>
           </div>
 
           <div className="text-[#94A3B8] text-sm text-center md:text-right">
             Built on Cardano • Privacy-First by Design
             <br />
-            <span className="text-xs">Powered by Hydra Layer 2</span>
+            <span className="text-xs">Powered by Cardano L1</span>
           </div>
         </div>
       </footer>

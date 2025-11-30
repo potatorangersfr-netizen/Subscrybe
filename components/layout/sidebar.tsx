@@ -26,7 +26,7 @@ const navItems = [
   { href: '/pay-per-use', label: 'Pay-Per-Use', icon: Server },
   { href: '/calendar', label: 'Calendar', icon: Calendar },
   { href: '/contracts', label: 'Smart Contracts', icon: FileCode },
-  { href: '/hydra', label: 'Hydra Demo', icon: Zap },
+  { href: '/payment-service', label: 'Payment Service', icon: Zap },
   { href: '/privacy', label: 'Privacy', icon: Shield },
   { href: '/merchant', label: 'Merchant', icon: Store },
   { href: '/memes', label: 'Memes Gallery', icon: Smile },

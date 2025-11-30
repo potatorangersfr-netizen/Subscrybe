@@ -24,10 +24,10 @@
 
 ## 🎯 Overview
 
-Subscrybe is a comprehensive subscription management platform that brings Web2 convenience to Web3. Built on Cardano blockchain with Hydra Layer 2 integration, it offers:
+Subscrybe is a comprehensive subscription management platform that brings Web2 convenience to Web3. Built on Cardano blockchain with an integrated Payment Service Provider, it offers:
 
-- **100x faster** transactions (0.2s vs 18s)
-- **88% cheaper** fees (0.02 ADA vs 0.17 ADA)
+- **Seamless payments** on Cardano L1
+- **Low commission** (2.5% service fee)
 - **Privacy-first** design (minimal data collection)
 - **Beautiful UX** (smooth animations, intuitive interface)
 
@@ -42,17 +42,17 @@ A single dashboard to track, optimize, and cancel all crypto subscriptions with 
 ## ✨ Key Features
 
 ### 🎨 User Interface
-- **7 Complete Pages**: Landing, Dashboard, Subscriptions, Calendar, Hydra Demo, Privacy, Merchant
+- **8 Complete Pages**: Landing, Dashboard, Subscriptions, Calendar, Payment Service, Privacy, Merchant, Memes
 - **25+ Components**: Fully reusable, animated, and responsive
 - **Dark Theme**: Cardano-branded color scheme
 - **Smooth Animations**: Framer Motion throughout
 - **Mobile-First**: Works perfectly on all devices
 
-### ⚡ Hydra Layer 2 Integration
-- **Real-time Comparison**: Side-by-side L1 vs Hydra demo
-- **Visual Progress**: Animated progress bars showing speed difference
-- **Cost Savings**: Clear display of fee reduction
-- **Confetti Celebration**: Fun success animations
+### ⚡ Payment Service Provider
+- **Automated Processing**: Seamless payment routing between users and merchants
+- **Commission System**: Transparent 2.5% service fee
+- **L1 Security**: All transactions on Cardano mainnet
+- **Demo Interface**: Interactive payment flow demonstration
 
 ### 🔒 Privacy-First Design
 - **Minimal Data**: Only wallet address stored
@@ -250,13 +250,13 @@ subscrybe-demo/
 - **Status Badges**: Color-coded indicators
 - **Achievement Popups**: Meme celebrations
 
-### 4. Hydra Demo ⭐ (Star Feature)
-- **Side-by-Side Comparison**: L1 vs Hydra
-- **Animated Progress Bars**: Visual speed difference
-- **Real-time Updates**: WebSocket connection
-- **Results Display**: 100x faster, 88% cheaper
-- **Confetti Celebration**: Success animation
-- **How It Works**: Educational content
+### 4. Payment Service ⭐ (Star Feature)
+- **Payment Flow Demo**: Interactive payment processing
+- **Fee Breakdown**: Transparent cost display
+- **Commission System**: 2.5% service fee shown
+- **Success Animation**: Visual confirmation
+- **Benefits Display**: Why use our service
+- **Platform Statistics**: Real-time metrics
 
 ### 5. Privacy Dashboard
 - **Privacy Score**: Animated gauge (95/100)
@@ -287,63 +287,32 @@ subscrybe-demo/
 
 ---
 
-## ⚡ Hydra Integration
+## ⚡ Payment Service Provider
 
-### What is Hydra?
-Hydra is Cardano's Layer 2 scaling solution that enables:
-- **Instant finality**: Transactions confirm in milliseconds
-- **Low fees**: 95% cheaper than Layer 1
-- **High throughput**: 1000+ TPS per head
-- **Isomorphic state channels**: Same security as L1
+### How It Works
+Our payment service acts as an intermediary between users and merchants:
 
-### Our Implementation
+1. **User Initiates**: User subscribes and authorizes payment
+2. **We Process**: Service validates and routes payment on Cardano L1
+3. **Merchant Receives**: Merchant gets payment minus 2.5% commission
 
-#### Mock Hydra Server
-Located in `hydra-node/mock-hydra-server/`, simulates:
-- Channel opening/closing
-- Payment processing
-- WebSocket updates
-- State management
+### Fee Structure
+- **Service Fee**: 2.5% of transaction amount
+- **Network Fee**: Standard Cardano L1 fee (~0.17 ADA)
+- **Total Cost**: Transparent and predictable
 
-#### Backend Integration
-`backend/src/services/hydra-client.js` provides:
-- Channel management
-- Payment execution
-- Status monitoring
-- Error handling
+### Benefits
+- ✅ **Secure**: All transactions on Cardano L1
+- ✅ **Low Commission**: Only 2.5% vs 5-10% traditional processors
+- ✅ **Easy Integration**: Simple API for merchants
+- ✅ **Automated**: Recurring payments handled automatically
 
-#### Frontend Demo
-`app/hydra/page.tsx` showcases:
-- Real-time comparison
-- Visual progress indicators
-- Cost/speed calculations
+### Demo
+Visit `/payment-service` to see:
+- Interactive payment flow
+- Fee breakdown
 - Success animations
-
-### Running the Full Stack
-
-```bash
-# Terminal 1: Frontend
-npm run dev
-
-# Terminal 2: Backend
-cd backend && npm start
-
-# Terminal 3: Mock Hydra
-cd hydra-node/mock-hydra-server && npm start
-```
-
-### Testing Hydra Features
-
-```powershell
-# Open a channel
-.\test-hydra-integration.ps1
-
-# Check status
-.\check-hydra-status.ps1
-
-# Run demo
-# Visit http://localhost:3000/hydra
-```
+- Platform statistics
 
 ---
 
@@ -357,8 +326,8 @@ cd hydra-node/mock-hydra-server && npm start
 **Dashboard (20s)**
 > "See all subscriptions, spending trends, and upcoming payments. 50 ADA per month across 8 active subscriptions."
 
-**Hydra Demo (40s)** ⭐
-> "Here's the game-changer. Standard L1: 18 seconds, 0.17 ADA. Hydra: 0.2 seconds, 0.02 ADA. That's 100x faster and 88% cheaper."
+**Payment Service (40s)** ⭐
+> "Here's how it works. Our payment service connects users and merchants. User pays 10.42 ADA total. We take 2.5% commission (0.25 ADA). Merchant receives 9.75 ADA. Simple, transparent, secure."
 
 **Privacy (20s)**
 > "Privacy-first design. We only know your wallet address. Export or delete anytime."
@@ -369,16 +338,16 @@ cd hydra-node/mock-hydra-server && npm start
 ### Key Talking Points
 
 1. **Problem**: Subscription chaos in crypto
-2. **Solution**: Unified dashboard with Hydra
-3. **Benefits**: Speed, cost, privacy
-4. **Tech**: Cardano + Hydra + Plutus
+2. **Solution**: Unified dashboard with payment service
+3. **Benefits**: Low fees, security, privacy
+4. **Tech**: Cardano L1 + Plutus + Payment Service
 5. **UX**: Beautiful, intuitive, responsive
 
 ### Screenshots to Take
 
 1. Landing page hero
 2. Dashboard overview
-3. Hydra demo (mid-animation)
+3. Payment service demo
 4. Privacy dashboard
 5. Mobile view
 6. Memes gallery
@@ -572,10 +541,10 @@ For production, you would need to implement these.
 - [Plutus Docs](https://plutus.readthedocs.io/)
 - [Cardano Developer Portal](https://developers.cardano.org/)
 
-### Hydra
-- [Hydra Head Protocol](https://hydra.family/)
-- [Hydra Documentation](https://hydra.family/head-protocol/)
-- [Hydra GitHub](https://github.com/input-output-hk/hydra)
+### Payment Processing
+- [Cardano Payment Solutions](https://developers.cardano.org/)
+- [Smart Contract Patterns](https://plutus.readthedocs.io/)
+- [Subscription Models](https://docs.cardano.org/)
 
 ### Next.js
 - [Next.js Docs](https://nextjs.org/docs)
@@ -611,10 +580,10 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 This demo successfully showcases:
 - ✅ The VISION of crypto subscription management
-- ✅ Hydra's practical benefits (speed + cost)
+- ✅ Payment service provider model (transparent fees)
 - ✅ Privacy-first design principles
 - ✅ Beautiful UX that rivals Web2 apps
-- ✅ Technical feasibility on Cardano
+- ✅ Technical feasibility on Cardano L1
 
 **Perfect for:**
 - Hackathon presentations
