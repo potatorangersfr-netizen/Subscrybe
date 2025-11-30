@@ -13,7 +13,7 @@ interface AddSubscriptionModalProps {
 }
 
 export function AddSubscriptionModal({ isOpen, onClose }: AddSubscriptionModalProps) {
-  const { walletAddress, refreshSubscriptions } = useApp();
+  const { walletAddress, setSubscriptions } = useApp();
   const [formData, setFormData] = useState({
     name: '',
     amount: '',
@@ -58,42 +58,33 @@ export function AddSubscriptionModal({ isOpen, onClose }: AddSubscriptionModalPr
     if (!validate()) return;
 
     try {
-      // Use demo wallet address if not connected
-      const effectiveWalletAddress = walletAddress || 'addr1qxy8z9abc123def456ghi789jkl012mno345pqr678stu901vwx';
+      // Add subscription directly to context (client-side only for demo)
+      const newSubscription = {
+        id: `custom-${Date.now()}`,
+        name: formData.name,
+        merchantName: formData.name,
+        amount: parseFloat(formData.amount),
+        interval: formData.interval,
+        category: formData.category,
+        status: 'active',
+        nextPayment: formData.startDate,
+        logoUrl: null,
+      };
+
+      // Add to subscriptions list
+      setSubscriptions((prev: any[]) => [...prev, newSubscription]);
+
+      toast.success('Subscription added successfully!');
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/subscriptions/custom`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-wallet-address': effectiveWalletAddress,
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          amount: parseFloat(formData.amount),
-          interval: formData.interval,
-          category: formData.category,
-          startDate: formData.startDate,
-        }),
+      setFormData({ 
+        name: '', 
+        amount: '', 
+        interval: 'monthly', 
+        category: 'Entertainment',
+        startDate: new Date().toISOString().split('T')[0]
       });
-
-      const data = await response.json();
-
-      if (data.success) {
-        toast.success('Subscription added successfully!');
-        await refreshSubscriptions();
-        
-        setFormData({ 
-          name: '', 
-          amount: '', 
-          interval: 'monthly', 
-          category: 'Entertainment',
-          startDate: new Date().toISOString().split('T')[0]
-        });
-        setErrors({});
-        onClose();
-      } else {
-        toast.error(data.error || 'Failed to add subscription');
-      }
+      setErrors({});
+      onClose();
     } catch (error) {
       console.error('Failed to add subscription:', error);
       toast.error('Failed to add subscription');
