@@ -14,7 +14,7 @@ import toast from 'react-hot-toast';
 import { staggerContainer } from '@/lib/animations';
 
 export default function SubscriptionsPage() {
-  const { subscriptions, cancelSubscription, loading } = useApp();
+  const { subscriptions, cancelSubscription, loading, setSubscriptions } = useApp();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'paused' | 'cancelled'>('all');
@@ -26,11 +26,30 @@ export default function SubscriptionsPage() {
     return matchesSearch && matchesFilter;
   });
 
+  const handlePaymentComplete = (id: string) => {
+    // Update subscription status to active
+    setSubscriptions(prev => prev.map(sub => 
+      sub.id === id ? { ...sub, status: 'active' } : sub
+    ));
+    toast.success('Payment completed! Subscription is now active.');
+  };
+
+  const handlePause = (id: string) => {
+    // Update subscription status to paused
+    setSubscriptions(prev => prev.map(sub => 
+      sub.id === id ? { ...sub, status: 'paused' } : sub
+    ));
+    toast.success('Subscription paused');
+  };
+
   const handleCancel = async (id: string) => {
     const sub = subscriptions.find(s => s.id === id);
     if (window.confirm(`Are you sure you want to cancel ${sub?.name || sub?.merchantName}?`)) {
       try {
-        await cancelSubscription(id);
+        // Update subscription status to cancelled
+        setSubscriptions(prev => prev.map(s => 
+          s.id === id ? { ...s, status: 'cancelled' } : s
+        ));
         toast.success('Subscription cancelled');
       } catch (error) {
         toast.error('Failed to cancel subscription');
@@ -128,7 +147,9 @@ export default function SubscriptionsPage() {
                   {useRealPayments ? (
                     <RealSubscriptionCard
                       subscription={subscription}
-                      onPaymentComplete={() => toast.success('Payment completed!')}
+                      onPaymentComplete={handlePaymentComplete}
+                      onCancel={handleCancel}
+                      onPause={handlePause}
                     />
                   ) : (
                     <SubscriptionCard

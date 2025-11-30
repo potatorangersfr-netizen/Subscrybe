@@ -7,6 +7,7 @@ import { mockUser } from './mock-data';
 interface AppContextType {
   user: any;
   subscriptions: any[];
+  setSubscriptions: React.Dispatch<React.SetStateAction<any[]>>;
   loading: boolean;
   connected: boolean;
   walletAddress: string | null;
@@ -130,8 +131,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   async function cancelSubscription(id: string) {
     try {
       setLoading(true);
-      await api.subscriptions.cancel(id);
-      await refreshSubscriptions();
+      
+      // Remove subscription from local state
+      setSubscriptions(prev => prev.filter(s => s.id !== id));
       
       // Check for cancellation milestone
       const cancelledCount = subscriptions.filter(s => s.status === 'cancelled').length + 1;
@@ -192,6 +194,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         subscriptions,
+        setSubscriptions,
         loading,
         connected,
         walletAddress,

@@ -10,11 +10,14 @@ import confetti from 'canvas-confetti';
 
 interface RealSubscriptionCardProps {
   subscription: any;
-  onPaymentComplete?: () => void;
+  onPaymentComplete?: (id: string) => void;
+  onCancel?: (id: string) => void;
+  onPause?: (id: string) => void;
 }
 
-export function RealSubscriptionCard({ subscription, onPaymentComplete }: RealSubscriptionCardProps) {
+export function RealSubscriptionCard({ subscription, onPaymentComplete, onCancel, onPause }: RealSubscriptionCardProps) {
   const [paying, setPaying] = useState(false);
+  const [paymentDone, setPaymentDone] = useState(false);
 
   const handlePayNow = async () => {
     setPaying(true);
@@ -35,13 +38,27 @@ export function RealSubscriptionCard({ subscription, onPaymentComplete }: RealSu
         { duration: 4000 }
       );
 
+      setPaymentDone(true);
+
       if (onPaymentComplete) {
-        onPaymentComplete();
+        onPaymentComplete(subscription.id);
       }
     } catch (error: any) {
       toast.error('Payment error: ' + error.message);
     } finally {
       setPaying(false);
+    }
+  };
+
+  const handleCancelSubscription = () => {
+    if (onCancel) {
+      onCancel(subscription.id);
+    }
+  };
+
+  const handlePauseSubscription = () => {
+    if (onPause) {
+      onPause(subscription.id);
     }
   };
 
@@ -93,29 +110,74 @@ export function RealSubscriptionCard({ subscription, onPaymentComplete }: RealSu
         </div>
 
         <div className="flex gap-2">
-          <Button
-            onClick={handlePayNow}
-            disabled={paying}
-            className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90"
-          >
-            {paying ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                <Zap className="mr-2 h-4 w-4" />
-                Pay Now
-              </>
-            )}
-          </Button>
+          {!paymentDone ? (
+            <Button
+              onClick={handlePayNow}
+              disabled={paying}
+              className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90"
+            >
+              {paying ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <Zap className="mr-2 h-4 w-4" />
+                  Pay Now
+                </>
+              )}
+            </Button>
+          ) : (
+            <Button
+              disabled
+              className="flex-1 bg-[#10B981] hover:bg-[#10B981] cursor-not-allowed"
+            >
+              <Zap className="mr-2 h-4 w-4" />
+              Payment Done
+            </Button>
+          )}
+          
+          {!paymentDone && (
+            <>
+              <Button
+                onClick={handlePauseSubscription}
+                variant="secondary"
+                className="border border-[#F59E0B]/30 text-[#F59E0B] hover:bg-[#F59E0B]/10"
+              >
+                Pause
+              </Button>
+              <Button
+                onClick={handleCancelSubscription}
+                variant="ghost"
+                className="border border-[#EF4444]/30 text-[#EF4444] hover:bg-[#EF4444]/10"
+              >
+                Cancel
+              </Button>
+            </>
+          )}
         </div>
 
         {subscription.status === 'active' && (
           <div className="mt-3 px-3 py-2 bg-[#10B981]/10 border border-[#10B981]/30 rounded-lg">
             <p className="text-xs text-[#10B981]">
               ✅ Active - Next payment due soon
+            </p>
+          </div>
+        )}
+        
+        {subscription.status === 'paused' && (
+          <div className="mt-3 px-3 py-2 bg-[#F59E0B]/10 border border-[#F59E0B]/30 rounded-lg">
+            <p className="text-xs text-[#F59E0B]">
+              ⏸️ Paused - No payments will be processed
+            </p>
+          </div>
+        )}
+        
+        {subscription.status === 'cancelled' && (
+          <div className="mt-3 px-3 py-2 bg-[#EF4444]/10 border border-[#EF4444]/30 rounded-lg">
+            <p className="text-xs text-[#EF4444]">
+              ❌ Cancelled - Subscription ended
             </p>
           </div>
         )}
