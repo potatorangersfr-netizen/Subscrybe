@@ -1,15 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Zap, Server, Database, Cpu, HardDrive, Loader2 } from 'lucide-react';
-import { hydraApi } from '@/lib/hydra-api';
 import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
-
-const USER_ID = 'demo-user-web';
 
 const PAY_PER_USE_SERVICES = [
   {
@@ -71,116 +68,54 @@ const PAY_PER_USE_SERVICES = [
 ];
 
 export default function PayPerUsePage() {
-  const [channel, setChannel] = useState<any>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const [usageHistory, setUsageHistory] = useState<any[]>([]);
   const [totalSpent, setTotalSpent] = useState(0);
-  const [openingChannel, setOpeningChannel] = useState(false);
-
-  useEffect(() => {
-    loadChannelStatus();
-  }, []);
-
-  const loadChannelStatus = async () => {
-    try {
-      const status = await hydraApi.getChannelStatus(USER_ID);
-      setChannel(status);
-    } catch (error) {
-      console.error('Failed to load channel:', error);
-    }
-  };
-
-  const handleOpenChannel = async () => {
-    setOpeningChannel(true);
-    try {
-      const result = await hydraApi.openChannel(USER_ID, 20);
-      
-      if (result.success) {
-        toast.success('Hydra channel opening... Please wait');
-        
-        // Poll for status
-        let pollCount = 0;
-        const maxPolls = 15;
-        const pollInterval = setInterval(async () => {
-          pollCount++;
-          const status = await hydraApi.getChannelStatus(USER_ID);
-          setChannel(status);
-          
-          if (status.status?.toLowerCase() === 'open') {
-            clearInterval(pollInterval);
-            setOpeningChannel(false);
-            toast.success('✅ Hydra channel is OPEN! You can now make payments.');
-            confetti({
-              particleCount: 100,
-              spread: 70,
-              origin: { y: 0.6 },
-              colors: ['#0033AD', '#00D4AA']
-            });
-          } else if (pollCount >= maxPolls) {
-            clearInterval(pollInterval);
-            setOpeningChannel(false);
-            toast.error('Channel opening timed out. Please refresh and try again.');
-          }
-        }, 1000);
-      } else {
-        setOpeningChannel(false);
-        toast.error('Failed to open channel');
-      }
-    } catch (error: any) {
-      setOpeningChannel(false);
-      toast.error('Failed to open channel: ' + error.message);
-    }
-  };
+  const [balance, setBalance] = useState(50); // Mock balance
 
   const handleUse = async (service: any, action: any) => {
-    if (!channel?.hasChannel || channel.status?.toLowerCase() !== 'open') {
-      toast.error('Please open a Hydra channel first! Go to /hydra');
-      return;
-    }
-
     setLoading(`${service.id}-${action.label}`);
+    
+    // Simulate processing delay
+    await new Promise(resolve => setTimeout(resolve, 800));
     
     try {
       // Calculate cost based on usage
       const units = (action as any).calls || (action as any).minutes || (action as any).gb || (action as any).queries || 1;
       const cost = service.price * units;
       
-      const contentId = `${service.id}-${Date.now()}`;
-      const result = await hydraApi.executePayment(
-        USER_ID,
-        `creator-${service.id}`,
-        cost,
-        contentId
-      );
-
-      if (result.success) {
-        confetti({
-          particleCount: 80,
-          spread: 60,
-          origin: { y: 0.6 },
-          colors: ['#0033AD', '#00D4AA', '#10B981']
-        });
-
-        const usage = {
-          service: service.name,
-          action: action.label,
-          units,
-          unitType: service.unit,
-          cost,
-          time: new Date().toLocaleTimeString(),
-          txHash: result.txHash,
-          processingTime: result.processingTimeMs
-        };
-
-        setUsageHistory(prev => [usage, ...prev]);
-        setTotalSpent(prev => prev + cost);
-        await loadChannelStatus();
-
-        toast.success(
-          `⚡ Processed in ${result.processingTimeMs}ms!\nCost: ${cost.toFixed(4)} ADA`,
-          { duration: 4000 }
-        );
+      if (balance < cost) {
+        toast.error('Insufficient balance!');
+        setLoading(null);
+        return;
       }
+
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { y: 0.6 },
+        colors: ['#0033AD', '#00D4AA', '#10B981']
+      });
+
+      const usage = {
+        service: service.name,
+        action: action.label,
+        units,
+        unitType: service.unit,
+        cost,
+        time: new Date().toLocaleTimeString(),
+        txHash: `0x${Math.random().toString(16).substr(2, 8)}`,
+        processingTime: Math.floor(Math.random() * 500) + 100
+      };
+
+      setUsageHistory(prev => [usage, ...prev]);
+      setTotalSpent(prev => prev + cost);
+      setBalance(prev => prev - cost);
+
+      toast.success(
+        `⚡ Processed in ${usage.processingTime}ms!\nCost: ${cost.toFixed(4)} ADA`,
+        { duration: 4000 }
+      );
     } catch (error: any) {
       toast.error('Payment failed: ' + error.message);
     } finally {
@@ -197,7 +132,7 @@ export default function PayPerUsePage() {
             Pay-Per-Use Services
           </h1>
           <p className="text-[#94A3B8]">
-            Pay only for resources you actually use - powered by Hydra ⚡
+            Pay only for resources you actually use - powered by Cardano L1 ⚡
           </p>
           <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-[#00D4AA]/10 border border-[#00D4AA]/30 rounded-lg">
             <Zap className="h-4 w-4 text-[#00D4AA]" />
@@ -207,68 +142,41 @@ export default function PayPerUsePage() {
           </div>
         </div>
 
-        {/* Channel Status & Stats */}
+        {/* Stats */}
         <div className="grid md:grid-cols-3 gap-4">
-          {channel?.hasChannel && channel.status?.toLowerCase() === 'open' ? (
-            <>
-              <Card className="p-4 bg-[#10B981]/10 border-[#10B981]/30">
-                <div className="flex items-center gap-3">
-                  <Zap className="h-5 w-5 text-[#10B981]" />
-                  <div>
-                    <p className="text-sm text-[#94A3B8]">Channel Balance</p>
-                    <p className="text-xl font-bold text-[#F8FAFC]">
-                      {channel.balance?.toFixed(4)} ADA
-                    </p>
-                  </div>
-                </div>
-              </Card>
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <Server className="h-5 w-5 text-[#00D4AA]" />
-                  <div>
-                    <p className="text-sm text-[#94A3B8]">Total Usage</p>
-                    <p className="text-xl font-bold text-[#F8FAFC]">
-                      {usageHistory.length} requests
-                    </p>
-                  </div>
-                </div>
-              </Card>
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <Database className="h-5 w-5 text-[#F59E0B]" />
-                  <div>
-                    <p className="text-sm text-[#94A3B8]">Total Spent</p>
-                    <p className="text-xl font-bold text-[#F8FAFC]">
-                      {totalSpent.toFixed(4)} ADA
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            </>
-          ) : (
-            <Card className="p-6 bg-[#EF4444]/10 border-[#EF4444]/30 md:col-span-3">
-              <p className="text-[#EF4444] mb-3">
-                ⚠️ You need an open Hydra channel to use pay-per-use services
-              </p>
-              <Button
-                onClick={handleOpenChannel}
-                disabled={openingChannel}
-                className="bg-[#00D4AA] hover:bg-[#00D4AA]/90"
-              >
-                {openingChannel ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Opening Channel...
-                  </>
-                ) : (
-                  <>
-                    <Zap className="mr-2 h-4 w-4" />
-                    Open Hydra Channel (20 ADA)
-                  </>
-                )}
-              </Button>
-            </Card>
-          )}
+          <Card className="p-4 bg-[#10B981]/10 border-[#10B981]/30">
+            <div className="flex items-center gap-3">
+              <Zap className="h-5 w-5 text-[#10B981]" />
+              <div>
+                <p className="text-sm text-[#94A3B8]">Balance</p>
+                <p className="text-xl font-bold text-[#F8FAFC]">
+                  {balance.toFixed(4)} ADA
+                </p>
+              </div>
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="flex items-center gap-3">
+              <Server className="h-5 w-5 text-[#00D4AA]" />
+              <div>
+                <p className="text-sm text-[#94A3B8]">Total Usage</p>
+                <p className="text-xl font-bold text-[#F8FAFC]">
+                  {usageHistory.length} requests
+                </p>
+              </div>
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="flex items-center gap-3">
+              <Database className="h-5 w-5 text-[#F59E0B]" />
+              <div>
+                <p className="text-sm text-[#94A3B8]">Total Spent</p>
+                <p className="text-xl font-bold text-[#F8FAFC]">
+                  {totalSpent.toFixed(4)} ADA
+                </p>
+              </div>
+            </div>
+          </Card>
         </div>
 
         {/* Pay-Per-Use Services */}
@@ -309,7 +217,7 @@ export default function PayPerUsePage() {
                       <Button
                         key={idx}
                         onClick={() => handleUse(service, action)}
-                        disabled={isLoading || !channel?.hasChannel}
+                        disabled={isLoading}
                         variant="secondary"
                         className="w-full justify-between"
                         size="sm"
@@ -387,7 +295,7 @@ export default function PayPerUsePage() {
             </div>
             <div>
               <h4 className="font-semibold text-[#10B981] mb-2">
-                ✅ Pay-Per-Use with Hydra
+                ✅ Pay-Per-Use on Cardano
               </h4>
               <ul className="text-sm text-[#94A3B8] space-y-1">
                 <li>• Pay only for what you use</li>

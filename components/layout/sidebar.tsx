@@ -12,8 +12,6 @@ import {
   Store,
   Home,
   FileCode,
-  Newspaper,
-  Server,
   Smile
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -22,8 +20,6 @@ const navItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/subscriptions', label: 'Subscriptions', icon: CreditCard },
-  { href: '/micro-subscriptions', label: 'Micro-Subscriptions', icon: Newspaper },
-  { href: '/pay-per-use', label: 'Pay-Per-Use', icon: Server },
   { href: '/calendar', label: 'Calendar', icon: Calendar },
   { href: '/contracts', label: 'Smart Contracts', icon: FileCode },
   { href: '/payment-service', label: 'Payment Service', icon: Zap },
