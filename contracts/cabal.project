@@ -1,0 +1,50 @@
+-- Cabal project file for Subscrybe smart contracts
+index-state: 2023-05-15T00:00:00Z
+
+packages: subscription-vault.cabal
+
+-- IOG dependencies
+source-repository-package
+  type: git
+  location: https://github.com/input-output-hk/plutus-apps
+  tag: v1.1.0
+  subdir:
+    plutus-ledger
+    plutus-ledger-api
+    plutus-script-utils
+    plutus-tx
+    plutus-tx-plugin
+
+source-repository-package
+  type: git
+  location: https://github.com/input-output-hk/plutus
+  tag: 1.1.0.0
+  subdir:
+    plutus-core
+    plutus-ledger-api
+    plutus-tx
+    plutus-tx-plugin
+
+-- Cardano dependencies
+source-repository-package
+  type: git
+  location: https://github.com/input-output-hk/cardano-base
+  tag: 4ea7e2d927c9a7f78ddc69738409a5827ab66b98
+  subdir:
+    base-deriving-via
+    binary
+    cardano-crypto-class
+    cardano-crypto-praos
+    measures
+    orphans-deriving-via
+    slotting
+    strict-containers
+
+constraints:
+  plutus-tx-plugin +use-ghc-stub
+  , plutus-ledger-api +defer-plugin-errors
+
+allow-newer:
+  *:aeson
+  , *:hashable
+  , *:lens

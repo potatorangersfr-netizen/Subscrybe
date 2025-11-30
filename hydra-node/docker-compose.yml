@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # Simplified Hydra node for demo purposes
+  # Using a mock Hydra API server since full Hydra requires complex setup
+  hydra-mock:
+    image: node:20-alpine
+    container_name: hydra-mock-api
+    working_dir: /app
+    volumes:
+      - ./mock-hydra-server:/app
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+    command: node server.js
+    environment:
+      - NODE_ENV=development
+      - PORT=4001
+      - WS_PORT=5001
+    restart: unless-stopped
+
+networks:
+  default:
+    name: subscrybe-network

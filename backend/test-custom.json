@@ -1,0 +1,7 @@
+{
+  "name": "Test Service",
+  "amount": 12,
+  "interval": "monthly",
+  "category": "Entertainment",
+  "startDate": "2024-01-15"
+}
